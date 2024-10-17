@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class TreeNode {
+public:
+    int val;
+    TreeNode* left = NULL;
+    TreeNode* right = NULL;
+    TreeNode(int value) : val(value), left(NULL), right(NULL) {}
+};
+
+// PreOrder --> Root Left Right  --> 1
+// Inorder  ---> Left Root Right  -->2
+// PostOrder -->Left Right Root  -->3
+
+void printAllTraversals(TreeNode* root) {
+    vector<int> PreOrder;
+    vector<int> InOrder;
+    vector<int> PostOrder;
+
+    stack<pair<TreeNode*, int>> st;
+
+    st.push({root, 1});
+    while (!st.empty()) {
+        auto [node, num] = st.top();
+        st.pop();
+        if (num == 1) {
+            PreOrder.push_back(node->val);
+            st.push({node, num + 1});
+            if (node->left)
+                st.push({node->left, 1});
+        } else if (num == 2) {
+            InOrder.push_back(node->val);
+            st.push({node, num + 1});
+            if (node->right)
+                st.push({node->right, 1});
+
+        } else {
+            PostOrder.push_back(node->val);
+        }
+    }
+
+    for (auto it : PreOrder)
+        cout << it << " ";
+    cout << "\n";
+    for (auto it : InOrder)
+        cout << it << " ";
+    cout << "\n";
+    for (auto it : PostOrder)
+        cout << it << " ";
+}
+
+int main() {
+    // Example usage
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+
+    printAllTraversals(root);
+
+    return 0;
+}
